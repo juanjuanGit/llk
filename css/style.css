@@ -1,0 +1,133 @@
+*{
+	margin: 0;
+	padding: 0;
+	list-style: none;
+}
+body{
+	text-align: center;
+}
+
+.box{
+	display: inline-block;
+	position: relative;
+	margin-top: 40px;
+}
+
+.box .line{
+	/*display: none;*/
+}
+.box .line span{
+	background: red;
+	position: absolute;
+	left: 0;
+	top: 0;
+}
+.box p{
+	position: absolute;
+	left: 70px;
+	top: 0;
+
+}
+.box .child_ul{
+	display: block;
+	clear: both;
+	height: 70px;
+}
+.box .child_ul li{
+	width: 70px;
+	height: 70px;
+	border: 1px solid #d1d1d1;
+	float: left;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	position: relative;
+}
+.box .child_ul li img{
+	width: 100%;
+	height: 100%;
+	position: absolute;
+	left: 0;
+	top: 0;
+	z-index: -1;
+}
+.box .child_ul li.active{
+	border:2px solid red;
+	-webkit-transition: .3s all ease;
+	-o-transition: .3s all ease;
+	transition: .3s all ease;
+	transform:scale(1.2);
+	opacity: 1;
+}
+.box .child_ul li.hide{
+	-webkit-transition: .3s all ease;
+	-o-transition: .3s all ease;
+	transition: .3s all ease;
+	transform:scale(1);
+	opacity: 0;
+	visibility: hidden;
+}
+.refresh{
+	float: right;
+	padding: 10px 30px;
+	border: 1px solid #ccc;
+	margin-right: 70px;
+	margin-top: -20px;
+	text-decoration: none;
+	display: block;
+}
+a.refresh:hover{
+	background: green;
+	color: #fff;
+}
+.bg{
+	width: 100%;
+	height: 100%;
+	background: #000;
+	opacity: 0.5;
+	position: absolute;
+	left: 0;
+	top: 0;
+	display: none;
+}
+.popup{
+	width: 500px;
+	height: 200px;
+	position: absolute;
+	left: 50%;
+	top: 200px;
+	margin-left: -250px;
+	z-index: 2;
+	background: #fff;
+	display: none;
+}
+.popup .title{
+	height: 50px;
+	width: 100%;
+	background: #d1d1d1;
+	margin-bottom: 30px;
+}
+.popup .btn_group{
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	margin: 0 10px 10px 0;
+}
+.popup .btn_group a{
+	display: inline-block;
+	padding: 8px 16px;
+	border: 1px solid #ccc;
+	margin-left: 10px;
+	float: left;
+}
+.popup .btn_group a:hover{
+	background: #d1d1d1;
+	color: green;
+}
+
+/*.bg.hide,.popup.hide{
+	display: none;
+}
+.bg.show,.popup.show{
+	display: block;
+}*/

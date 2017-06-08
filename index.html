@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>连连看</title>
+	<link rel="stylesheet" href="css/style.css">
+	<script src="js/jquery.min.js"></script>
+	<script src="js/vue2.js"></script>
+	<script src="js/vue-resource.js"></script>
+
+	<script src="js/state.js"></script>
+	<script src="js/createData.js"></script>
+	<script src="js/direction.js"></script>
+
+	<script>
+
+	window.onload = function()
+	{
+		var vm = new Vue({
+			el : '.box',
+			data : {
+				msg : arrData,
+				o1:'',
+				o2:'',
+				count : 0,
+				line: []
+			},
+			methods:{
+				add : function(event,i1,i2)
+				{
+
+					// 两者做对比，相同归零重新开始，绝对相同或者类型不相同1 = 2；
+
+					// 点击 判断 是否为初次点击 
+					// 是 ： 等于o1，增加点击状态 active
+					// 不是 ： 等于o2，判断类型是否相同
+					if(!this.o1){
+
+						this.o1 = arrData[i1][i2];
+						this.o1.active = true;
+
+					}else{
+						this.o2 = arrData[i1][i2];
+
+						if(this.o1.ID == this.o2.ID || this.o1.type !== this.o2.type)
+						{
+							clearOther(this);
+
+						}else{
+
+							// 前提类型相同
+							if(this.o1.type == this.o2.type)
+							{
+
+								// 1，挨着的
+								if(Math.abs(this.o1.x-this.o2.x)+Math.abs(this.o1.y-this.o2.y) == 1)
+								{
+
+									if(Math.abs(this.o1.x-this.o2.x) == 1)
+									{
+										// 左右
+
+										var left;
+
+										for(var l=0; l<Math.abs(this.o2.x-this.o1.x); l++)
+										{
+
+											if(this.o1.x > this.o2.x)
+											{
+												left = (this.o2.x + l)*70+35;
+											}else{
+												left = (this.o1.x + l)*70+35;
+											}
+
+											this.line.push({
+												left:left,
+												top:this.o1.y * 70 + 35,
+												width:'70px',
+												height:'2px'
+											});
+										}
+
+
+									}
+
+									if(Math.abs(this.o1.y-this.o2.y) == 1)
+									{
+										// 上下
+
+										var top;
+
+										for(var l=0; l<Math.abs(this.o2.y-this.o1.y); l++)
+										{
+
+											if(this.o1.y > this.o2.y)
+											{
+												top = (this.o1.y+l)*70-35;
+											}else{
+												top = (this.o1.y+1+l)*70-35;
+											}
+
+											this.line.push({
+												left: (this.o1.x)*70+35-2,
+												top: top,
+												width:'2px',
+												height:'70px'
+											});
+										}
+
+									}
+
+									sameHide(this);
+									refresh(this);
+
+
+								// 2，四边
+								}else if(this.o1.x == 1 && (this.o2.x == 1) || ((this.o1.y == 1) && (this.o2.y == 1)) || (this.o1.x == pGroup[this.count].row && (this.o2.x == pGroup[this.count].row) || ((this.o1.y == pGroup[this.count].col) && (this.o2.y == pGroup[this.count].col))))
+								{
+
+									route(this);
+
+
+								// 其它 连接 和 无法链接 的条件
+								}else{
+
+									var a = route(this);
+
+									console.log(a);
+									
+									var b = false;
+
+									for(var i=0; i<a.length; i++)
+									{
+										if(a[i] == true)
+										{
+											b = true;
+										}
+									}
+
+
+									if(b == false)
+									{
+										clearOther(this);
+									}
+									
+								}
+							}
+						}
+
+					}
+
+				},
+				repaint_page : function()
+				{
+					// 点击刷新按钮时，数据重新排序 绘图；
+
+					var arr = [];
+					var n = 0;
+
+
+					for(var i=1; i<this.msg.length-1; i++)
+					{
+
+						for(var j=1; j<this.msg[i].length-1; j++)
+						{
+							if(this.msg[i][j].isRemove == true)
+							{
+								continue;	
+							}
+							arr.push(this.msg[i][j].type);
+						}
+					}	
+
+					arr = arr.sort(function(n1,n2){
+						return Math.random() - 0.5;
+					});
+
+					for(var i=1; i<pGroup[this.count].row+1; i++)
+					{
+
+						for(var j=1; j<pGroup[this.count].col+1; j++)
+						{
+
+							if(this.msg[i][j].isRemove == true)
+							{
+								continue;
+
+							}else{
+
+								this.msg[i][j].type = arr[n];
+								this.msg[i][j].ID = n;
+								this.msg[i][j].imgSrc = imgData[this.msg[i][j].type];
+
+								n++;
+							}
+
+							
+						}
+					}
+				}
+			},
+			mounted:function()
+			{
+
+				// 实例创建后加载
+
+
+			}
+		})
+	};
+	</script>
+</head>
+<body>
+	<div class="box">
+		<div>
+			<p>第 {{ count + 1 }} 关</p>
+		</div>
+		<ul v-show = "msg.length !== 0">
+			<li v-for = "(row,i1) in msg">
+				<ul class="child_ul">
+					<li v-for = "(column,i2) in row" @click = "add($event,i1,i2)" :class = "{hide:column.isRemove,active:column.active}">
+						<!-- {{column.x}},
+						{{column.y}}<br>
+						{{column.type}} -->
+						<img :src="column.imgSrc" alt="">
+
+					</li>
+				</ul>
+			</li>
+		</ul>
+		<div class="line" v-if = "line.length !== 0">
+			<span v-for="name in line" :style={left:name.left+'px',top:name.top+'px',width:name.width,height:name.height}></span>
+		</div>
+		<a href="javascript:;" class="refresh" @click="repaint_page()">实在的找不着，就点这吧！</a>
+	</div>
+	<div class="bg"></div>
+	<div class="popup">
+		<div class="title"></div>
+		<p>恭喜您通过本关 ^_^</p>
+		<div class="btn_group">
+			<a href="javascript:;" class="cancel">不玩了</a>
+			<a href="javascript:;" class="continue">进入下一关</a>
+		</div>
+	</div>
+</body>
+</html>
