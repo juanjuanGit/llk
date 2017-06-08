@@ -202,7 +202,6 @@ function refresh(_this)
 
 		clearTimeout(timer);
 
-
 	},500);
 }
 

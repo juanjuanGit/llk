@@ -1521,45 +1521,6 @@ function route(_this){
 				break;
 			}
 		}
-
-		// switch(arr[i])
-		// {
-		// 	case '左':
-		// 	var b = routeLeft(_this,x,y);
-
-		// 	if(b){
-		// 		a.push(b);
-		// 		break;
-		// 	}
-
-		// 	break;
-		// 	case '右':
-		// 	var c = routeRight(_this,x,y);
-
-		// 	console.log(i+''+2);
-		// 	if(c){
-		// 		a.push(c);
-		// 		break;
-		// 	}
-
-		// 	break;
-		// 	case '上':
-		// 	var d = routeTop(_this,x,y);
-
-		// 	if(d){
-		// 		a.push(d);
-		// 		break;
-		// 	}
-		// 	break;
-		// 	case '下':
-		// 	var e = routeBottom(_this,x,y);
-
-		// 	if(e){
-		// 		a.push(e);
-		// 		break;
-		// 	}
-		// 	break;
-		// }
 	}
 	return a;
 }

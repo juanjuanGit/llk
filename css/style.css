@@ -12,10 +12,6 @@ body{
 	position: relative;
 	margin-top: 40px;
 }
-
-.box .line{
-	/*display: none;*/
-}
 .box .line span{
 	background: red;
 	position: absolute;
@@ -124,10 +120,3 @@ a.refresh:hover{
 	background: #d1d1d1;
 	color: green;
 }
-
-/*.bg.hide,.popup.hide{
-	display: none;
-}
-.bg.show,.popup.show{
-	display: block;
-}*/
