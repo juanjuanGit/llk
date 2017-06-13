@@ -39,13 +39,10 @@ function drawLine(_this,arr)
 	for(var i=0; i<arr.length; i++)
 	{
 		console.log(arr[i]);
-
 		if(i < (arr.length - 1))
 		{
-
 			if(Math.abs(arr[i].x - arr[i+1].x) == 1)
 			{
-
 				if(arr[i].x < arr[i+1].x)
 				{
 					_this.line.push({
@@ -62,12 +59,10 @@ function drawLine(_this,arr)
 						height:'2px'
 					});
 				}				
-
 			}
 
 			if(Math.abs(arr[i].y - arr[i+1].y) == 1)
 			{
-
 				if(arr[i].y < arr[i+1].y )
 				{
 					_this.line.push({
@@ -86,6 +81,5 @@ function drawLine(_this,arr)
 				}
 			}
 		}
-
 	}
 };

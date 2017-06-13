@@ -1,54 +1,31 @@
 // 判断方向 
 function direction(o1,o2)
 {
-	// var smallX;
-	// var bigX;
-	// var smallY;
-	// var bigY;
 	var h = 0;
 	var v = 0;
 
-
 	if(o1.x > o2.x)
 	{
-		// left
 		h = -1;
-		// smallX = o2.x;
-		// bigX = o1.x;
 
-	}else if(o1.x == o2.x){
-		// center
+	}else if(o1.x == o2.x)
+	{
 		h = 0;
-		// smallX = o2.x;
-		// bigX = o1.x;
-
 
 	}else{
-		// right
 		h = 1;
-		// smallX = o1.x;
-		// bigX = o2.x;
 	}
 
 	if(o1.y > o2.y)
 	{
-		// top
 		v = 1;
-		// smallY = o2.y;
-		// bigY = o1.y;
 
-	}else if(o1.y == o2.y){
-
-		// middle
+	}else if(o1.y == o2.y)
+	{
 		v = 0;
-		// smallY = o2.y;
-		// bigY = o1.y;
 
 	}else{
-		// bottom
 		v = -1;
-		// smallY = o1.y;
-		// bigY = o2.y;
 	}
 	return {horizontal:h,vertical:v};
 }
@@ -56,12 +33,9 @@ function direction(o1,o2)
 // 优先路线排序
 function direction2(o1,o2)
 {
-
 	var arr = [];
-
 	if(o1.x > o2.x)
 	{
-
 		if(o1.y > o2.y)
 		{
 			arr = ['左','上','下','右'];
@@ -89,7 +63,6 @@ function direction2(o1,o2)
 			arr = ['下','右','左'];
 		}
 
-
 	}else{
 
 		if(o1.y > o2.y)
@@ -108,10 +81,7 @@ function direction2(o1,o2)
 			arr = ['右','下','上','左'];
 
 		}
-
 	}
-
-	
 	return arr;
 }
 
@@ -123,7 +93,6 @@ function direction2(o1,o2)
 // 路线左
 function routeLeft(_this,x,y)
 {	
-
 	var switchBtn = false;
 
 	var mainLine = [];
@@ -133,11 +102,9 @@ function routeLeft(_this,x,y)
 
 	mainLine.push({x:_this.o1.x,y:_this.o1.y});
 
-
 	if(y == 0)
 	{
 		// 1-1 y相同，都在 x 轴上
-
 		for(var i=_this.o1.x-1; i>_this.o2.x; i--)
 		{
 			
@@ -158,28 +125,18 @@ function routeLeft(_this,x,y)
 		if(switchBtn)
 		{
 			sum.push({x:_this.o2.x,y:_this.o2.y});
-
 			drawLine(_this,sum);
-
 			sameHide(_this);
-
 			refresh(_this);
-
 			return switchBtn;
-
 		}else{
-
 			return false;
 		}
 
-		
 	}else{
-
 		// 1-2 不在同一个 x 轴上
-
 		for(var i=_this.o1.x-1; i>-1; i--)
 		{
-
 			mainLine.push({x:i,y:_this.o1.y});
 
 			if(arrData[_this.o1.y][i].isRemove == false)
@@ -188,6 +145,7 @@ function routeLeft(_this,x,y)
 				break;
 			}
 			
+			// 2-1、左上
 			if(y > 0)
 			{
 				// 左上直达
@@ -197,69 +155,51 @@ function routeLeft(_this,x,y)
 					{
 						switchBtn = true;
 						sum = mainLine.concat(childLine);
-
 					}
-
 					for(var j=_this.o1.y-1; j>_this.o2.y; j--)
 					{
 						childLine.push({x:i,y:j});
-
 						if(arrData[j][i].isRemove == false)
 						{
 							childLine.length = 0;
 							break;
 						}
-
 						if(j == (_this.o2.y + 1))
 						{
 							switchBtn = true;
 							sum = mainLine.concat(childLine);
 						}					
 					}
-
 					if(switchBtn)
 					{
-						
 						sum.push({x:_this.o2.x,y:_this.o2.y});
-
 						drawLine(_this,sum);
-
 						sameHide(_this);
-
 						refresh(_this);
-
 						return switchBtn;
-
 					}
 
-					
 				}else{
 
 					for(var j=_this.o1.y-1; j>_this.o2.y-1; j--)
 					{
-
 						childLine.push({x:i,y:j});
-
 						if(arrData[j][i].isRemove == false)
 						{
 							childLine.length = 0;
 							break;
 						}
 
-						// 小于 o2.x 往右走;  大于 o2.x 往左走;  等于，到头 不拐弯
-						
 						// 向上走到最后一步，拐弯
-
+						// 小于 o2.x 往右走;  大于 o2.x 往左走;
 						if(j == _this.o2.y)
 						{
-
 							// 左||右走第一个
 							if(Math.abs(_this.o2.x - i) == 1)
 							{
 								switchBtn = true;
 								sum = mainLine.concat(childLine);
 							}
-
 
 							// 3-1、右走
 							if(i < _this.o2.x)
@@ -273,14 +213,12 @@ function routeLeft(_this,x,y)
 										subBranch.length = 0;
 										break;										
 									}
-
 									if(i2 == (_this.o2.x-1))
 									{
 										switchBtn = true;
 										sum = mainLine.concat(childLine,subBranch);
 									}
 								}
-
 							}else{
 							// 3-2、左走
 								for(var i2=i-1; i2>_this.o2.x; i2--)
@@ -292,20 +230,17 @@ function routeLeft(_this,x,y)
 										subBranch.length = 0;
 										break;
 									}
-
 									if(i2 == (_this.o2.x+1))
 									{
 										switchBtn = true;
 										sum = mainLine.concat(childLine,subBranch);
 									}
-
 								}
 							}
 
 							if(switchBtn)
 							{
 								sum.push({x:_this.o2.x,y:_this.o2.y});
-
 								drawLine(_this,sum);
 								sameHide(_this);
 								refresh(_this);
@@ -349,17 +284,11 @@ function routeLeft(_this,x,y)
 
 					if(switchBtn)
 					{
-
 						sum.push({x:_this.o2.x,y:_this.o2.y});
-
 						drawLine(_this,sum);
-
 						sameHide(_this);
-
 						refresh(_this);
-
 						return switchBtn;
-
 					}
 
 				}else{
@@ -368,7 +297,6 @@ function routeLeft(_this,x,y)
 					{
 						
 						childLine.push({x:i,y:j});
-
 						if(arrData[j][i].isRemove == false)
 						{			
 							childLine.length = 0;
@@ -376,9 +304,9 @@ function routeLeft(_this,x,y)
 						}
 
 						// 向下走到最后一步，拐弯
+						// 小于 o2.x 往右走;  大于 o2.x 往左走;
 						if(j == _this.o2.y)
 						{
-
 							// 左||右走第一个
 							if(Math.abs(_this.o2.x - i) == 1)
 							{
@@ -386,11 +314,9 @@ function routeLeft(_this,x,y)
 								sum = mainLine.concat(childLine);
 							}
 
-
 							// 3-1、右走
 							if(i < _this.o2.x)
 							{
-
 								for(var i2=i+1; i2<_this.o2.x; i2++)
 								{
 									subBranch.push({x:i2,y:j});
@@ -432,7 +358,6 @@ function routeLeft(_this,x,y)
 
 							if(switchBtn)
 							{
-								
 								sum.push({x:_this.o2.x,y:_this.o2.y});
 								drawLine(_this,sum);
 								sameHide(_this);
@@ -443,25 +368,17 @@ function routeLeft(_this,x,y)
 					}
 				}
 			}
-
 		}
 	}
 
 	if(switchBtn)
 	{
-
 		sum.push({x:_this.o2.x,y:_this.o2.y});
-
 		drawLine(_this,sum);
-
 		sameHide(_this);
-
 		refresh(_this);
-
 		return switchBtn;
-
 	}else{
-
 		return false;
 	}
 }
@@ -503,13 +420,9 @@ function routeRight(_this,x,y)
 		if(switchBtn)
 		{
 			sum.push({x:_this.o2.x,y:_this.o2.y});
-
 			drawLine(_this,sum);
-
 			sameHide(_this);
-
 			refresh(_this);
-
 			return switchBtn;
 
 		}else{
@@ -520,7 +433,7 @@ function routeRight(_this,x,y)
 	}else{
 	// 不在同一个 x 轴上		
 
-		for(var i=_this.o1.x+1; i<pGroup[_this.count].col+2; i++)
+		for(var i=_this.o1.x+1; i<pGroup[_this.level].col+2; i++)
 		{
 			mainLine.push({x:i,y:_this.o1.y});
 
@@ -566,34 +479,25 @@ function routeRight(_this,x,y)
 					{
 
 						sum.push({x:_this.o2.x,y:_this.o2.y});
-
 						drawLine(_this,sum);
-
 						sameHide(_this);
-
 						refresh(_this);
-
 						return switchBtn;
-
 					}
-
-
 				}else{
 
 					for(var j=_this.o1.y-1; j>_this.o2.y-1; j--)
 					{
-						// 小于 o2.x 往右走;  大于 o2.x 往左走;  等于，到头 不拐弯
-
+						
 						childLine.push({x:i,y:j});
-									
 						if(arrData[j][i].isRemove == false)
 						{
 							childLine.length = 0;
 							break;
 						}
 
-
 						// 向上走到最后一步，拐弯
+						// 小于 o2.x 往右走;  大于 o2.x 往左走;
 						if(j == _this.o2.y)
 						{
 							// 左||右挨着的
@@ -649,13 +553,9 @@ function routeRight(_this,x,y)
 							if(switchBtn)
 							{
 								sum.push({x:_this.o2.x,y:_this.o2.y});
-
 								drawLine(_this,sum);
-
 								sameHide(_this);
-								
 								refresh(_this);
-								
 								return switchBtn;
 							}
 						}
@@ -678,7 +578,6 @@ function routeRight(_this,x,y)
 						sum = mainLine.concat(childLine);
 					}
 
-
 					// 下后直达
 					for(var j=_this.o1.y+1; j<_this.o2.y; j++)
 					{
@@ -700,17 +599,11 @@ function routeRight(_this,x,y)
 
 					if(switchBtn)
 					{
-
 						sum.push({x:_this.o2.x,y:_this.o2.y});
-
 						drawLine(_this,sum);
-
 						sameHide(_this);
-
 						refresh(_this);
-
 						return switchBtn;
-
 					}
 					
 
@@ -718,15 +611,16 @@ function routeRight(_this,x,y)
 
 					for(var j=_this.o1.y+1; j<_this.o2.y+1; j++)
 					{
-						// 小于 o2.x 往右走;  大于 o2.x 往左走;  等于，到头 不拐弯
+						
 						childLine.push({x:i,y:j});
-
 						if(arrData[j][i].isRemove == false)
 						{
 							childLine.length = 0;
 							break;
 						}
 
+						// 向下走到最后一步，拐弯
+						// 小于 o2.x 往右走;  大于 o2.x 往左走;
 
 						if(j == _this.o2.y)
 						{
@@ -840,7 +734,6 @@ function routeTop(_this,x,y)
 
 		if(switchBtn)
 		{
-
 			sum.push({x:_this.o2.x,y:_this.o2.y});
 			drawLine(_this,sum);
 			sameHide(_this);
@@ -902,17 +795,11 @@ function routeTop(_this,x,y)
 
 					if(switchBtn)
 					{
-
 						sum.push({x:_this.o2.x,y:_this.o2.y});
-
 						drawLine(_this,sum);
-
 						sameHide(_this);
-
 						refresh(_this);
-						
 						return switchBtn;
-
 					}
 
 				}else{
@@ -982,7 +869,6 @@ function routeTop(_this,x,y)
 							if(switchBtn)
 							{
 								sum.push({x:_this.o2.x,y:_this.o2.y});
-
 								drawLine(_this,sum);
 								sameHide(_this);
 								refresh(_this);
@@ -1027,17 +913,11 @@ function routeTop(_this,x,y)
 
 					if(switchBtn)
 					{
-
 						sum.push({x:_this.o2.x,y:_this.o2.y});
-
 						drawLine(_this,sum);
-
 						sameHide(_this);
-
 						refresh(_this);
-
 						return switchBtn;
-
 					}
 
 				}else{
@@ -1111,15 +991,9 @@ function routeTop(_this,x,y)
 								return switchBtn;
 							}
 						}
-
 					}
-				}
-
-				
-
+				}	
 			}
-
-
 
 		}
 
@@ -1173,15 +1047,10 @@ function routeBottom(_this,x,y)
 
 		if(switchBtn)
 		{
-
 			sum.push({x:_this.o2.x,y:_this.o2.y});
-
 			drawLine(_this,sum);
-
 			sameHide(_this);
-
 			refresh(_this);
-
 			return switchBtn;
 
 		}else{
@@ -1193,7 +1062,7 @@ function routeBottom(_this,x,y)
 	}else{
 	// 1-2 不在同一个 y 轴上
 
-		for(var j=_this.o1.y+1; j<pGroup[_this.count].row+2; j++)
+		for(var j=_this.o1.y+1; j<pGroup[_this.level].row+2; j++)
 		{
 			mainLine.push({x:_this.o1.x,y:j});
 
@@ -1233,17 +1102,11 @@ function routeBottom(_this,x,y)
 
 					if(switchBtn)
 					{
-
 						sum.push({x:_this.o2.x,y:_this.o2.y});
-
 						drawLine(_this,sum);
-
 						sameHide(_this);
-
 						refresh(_this);
-
 						return switchBtn;
-
 					}
 					
 				}else{
@@ -1310,7 +1173,6 @@ function routeBottom(_this,x,y)
 
 							if(switchBtn)
 							{
-								
 								sum.push({x:_this.o2.x,y:_this.o2.y});
 								drawLine(_this,sum);
 								sameHide(_this);
@@ -1353,17 +1215,11 @@ function routeBottom(_this,x,y)
 
 					if(switchBtn)
 					{
-
 						sum.push({x:_this.o2.x,y:_this.o2.y});
-
 						drawLine(_this,sum);
-
 						sameHide(_this);
-
 						refresh(_this);
-
 						return switchBtn;
-
 					}
 					
 
@@ -1432,7 +1288,6 @@ function routeBottom(_this,x,y)
 
 							if(switchBtn)
 							{
-								
 								sum.push({x:_this.o2.x,y:_this.o2.y});
 								drawLine(_this,sum);
 								sameHide(_this);
@@ -1450,7 +1305,6 @@ function routeBottom(_this,x,y)
 
 	if(switchBtn)
 	{
-		
 		sum.push({x:_this.o2.x,y:_this.o2.y});
 		drawLine(_this,sum);
 		sameHide(_this);
@@ -1475,51 +1329,29 @@ function route(_this){
 	
 	for(var i=0; i<arr.length; i++)
 	{
-
 		if(arr[i] == '左')
 		{
 			var b = routeLeft(_this,x,y);
-
 			a.push(b);
-
-			if(b)
-			{
-				break;
-			}
+			if(b)break;
 		}
 		if(arr[i] == '右')
 		{
 			var c = routeRight(_this,x,y);
-
 			a.push(c);
-
-			if(c)
-			{
-				break;
-			}
+			if(c)break;
 		}
 		if(arr[i] == '上')
 		{
 			var d = routeTop(_this,x,y);
-
 			a.push(d);
-
-
-			if(d)
-			{
-				break;
-			}
+			if(d)break;
 		}
 		if(arr[i] == '下')
 		{
 			var e = routeBottom(_this,x,y);
-
 			a.push(e);
-
-			if(e)
-			{
-				break;
-			}
+			if(e)break;
 		}
 	}
 	return a;

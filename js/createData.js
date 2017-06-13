@@ -1,10 +1,16 @@
+
+//后面用来存储界面展示需要用到的数据
 var arrData;
-var timer;
+
+//稍后定义定时器
+var timer;      	
+
+//页面绘制 和 设置游戏难易程度数据	 例：{type:29, row:8, col:12}
 var pGroup = [
-	{type:6, row:4, col:6},
-	{type:8, row:6, col:6},
+	{type:12, row:6, col:8},
+	{type:15, row:6, col:6},
 	{type:10, row:3, col:6},
-	{type:12, row:5, col:10},
+	{type:17, row:5, col:10},
 	{type:14, row:8, col:6},
 	{type:16, row:6, col:10},
 	{type:18, row:6, col:8},
@@ -13,9 +19,10 @@ var pGroup = [
 	{type:24, row:8, col:10},
 	{type:26, row:6, col:9},
 	{type:28, row:7, col:10},
-	{type:29, row:8, col:12},
+	{type:29, row:8, col:12}    
 ];
 
+//图片路径信息数据 例：'img/29.jpg'
 var imgData = [
 	'img/0.jpg',
 	'img/1.jpg',
@@ -46,43 +53,33 @@ var imgData = [
 	'img/26.jpg',
 	'img/27.jpg',
 	'img/28.jpg',
-	'img/29.jpg',
+	'img/29.jpg'   
 ];
 
 
 function createData(parameter)
 {
-	parameter = parameter || {};
-	parameter.type = parameter.type || 6;
-	parameter.row = parameter.row || 4;
-	parameter.col = parameter.col || 10;
-
 	var count = parameter.row * parameter.col;
-
-	// 图片类型打乱，每次获取不同图片
-	imgData = imgData.sort(function(n1,n2){
-		return Math.random()-0.5;
-	});
-
 	var arr = [];
 
-	// 1、数据的总量
+
 	for(var i=0; i<count; i++)
 	{
-		// 2、因为连连看是成对的，所以 % 一半，使数据 两两 相对应
+		// 1、因为连连看是成对的，所以 % 一半，使数据 两两 相对应
 		var group = i % (count / 2);
 
-		// 3、得到有多少组数据后，去 % 类型，使整个组的数据 就 类型的数量来进行分配
+		// 2、得到多个成对数据后，去 % 传参进来的类型，使整个组的数据就类型的数量来进行分配
 		arr.push(group % parameter.type);
 	}
 
 
 	// 将数据打乱，打开时每次都不一样
-	arr = arr.sort(function(n1,n2){
+	arr.sort(function(n1,n2){
 		return Math.random()-0.5;
 	});
 
-	// 包含所有数据的二维数据
+
+	// 包含所有数据的二维数组
 	arrData = [];
 	var n = 0;
 	for(var i=0; i<parameter.row+2; i++)
@@ -93,9 +90,7 @@ function createData(parameter)
 		for(var j=0; j<parameter.col+2; j++)
 		{
 			// 列 - json = {x:'',y:'',type:''}
-
 			var json = {};
-
 
 			if(i==0 || (i==parameter.row+1) || (j==0) || (j==parameter.col+1))
 			{
@@ -113,16 +108,12 @@ function createData(parameter)
 				json.isRemove = false;
 				json.active = false;
 				n++;
-
 			}
 
 			arr2.push(json);	
-
 		}
-
 		arrData.push(arr2);
 	};
-
 };
 createData(pGroup[0]);
 
@@ -132,9 +123,9 @@ function refresh(_this)
 {
 	timer = setTimeout(function()
 	{
-		for(var i=0; i<pGroup[_this.count].row+2; i++)
+		for(var i=1; i<pGroup[_this.level].row+1; i++)
 		{
-			for(var j=0; j<pGroup[_this.count].col+2; j++)
+			for(var j=1; j<pGroup[_this.level].col+1; j++)
 			{
 				if(arrData[i][j].isRemove == false)
 				{
@@ -144,7 +135,7 @@ function refresh(_this)
 		}
 
 		// 如果当前关卡为最后一关，更改 btn 提示内容
-		if(_this.count == pGroup.length-1)
+		if(_this.level == pGroup.length-1)
 		{
 			$('.popup p').html('已经是最后一关了哦 ^_^');
 			$('.popup .btn_group .continue').html('重新开始');
@@ -152,7 +143,6 @@ function refresh(_this)
 
 		$('.bg').show(500);
 		$('.popup').show(500);
-
 
 		// 删除绑定事件，只执行一次
 		$('.popup .btn_group').off();
@@ -174,26 +164,25 @@ function refresh(_this)
 
 
 			// 点击进入下一关，如果当前关卡为最后一关，将btn 提示改为初始内容
-			if(_this.count == pGroup.length-1)
+			if(_this.level == pGroup.length-1)
 			{
-				_this.count = -1;
+				_this.level = -1;
 				$('.popup p').html('恭喜您通过本关 ^_^');
 				$('.popup .btn_group .continue').html('进入下一关');
 			}
 
 			
 			// 新数据重绘
-			_this.count+=1;
-			createData(pGroup[_this.count]);
-			for(var i=1; i<pGroup[_this.count].row+1; i++)
+			_this.level+=1;
+			createData(pGroup[_this.level]);
+			for(var i=1; i<pGroup[_this.level].row+1; i++)
 			{
-				for(var j=1; j<pGroup[_this.count].col+1; j++)
+				for(var j=1; j<pGroup[_this.level].col+1; j++)
 				{
 					arrData[i][j].isRemove == false;
 
 				}
 			}
-
 
 			// 同步数据到DOM
 			_this.msg = arrData;
